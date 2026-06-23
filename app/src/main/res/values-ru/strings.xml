@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">MtPipe</string>
+
+    <!-- Top bar -->
+    <string name="menu">Меню</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О приложении</string>
+    <string name="logs">Логи</string>
+
+    <!-- Text fields -->
+    <string name="server_label">Сервер</string>
+    <string name="server_placeholder">напр. proxy.example.com</string>
+    <string name="port_label">Порт</string>
+    <string name="port_placeholder">напр. 443</string>
+    <string name="secret_label">Секрет</string>
+    <string name="secret_placeholder">Секрет MTProto прокси</string>
+
+    <!-- Status -->
+    <string name="disconnected">Отключено</string>
+    <string name="running">Работает</string>
+    <string name="starting">Запуск…</string>
+    <string name="clients_connected">Соединений: %d</string>
+
+    <!-- Buttons -->
+    <string name="paste_from_clipboard">Вставить из буфера</string>
+    <string name="connect">Подключить</string>
+    <string name="copy_link">Копировать ссылку</string>
+    <string name="open_telegram">Открыть Telegram</string>
+
+    <!-- Toasts -->
+    <string name="fields_filled">Поля заполнены</string>
+    <string name="no_valid_link">Нет валидной ссылки прокси в буфере обмена</string>
+    <string name="fill_all_fields">Заполните все поля</string>
+    <string name="invalid_port">Неверный порт</string>
+    <string name="link_copied">Ссылка скопирована</string>
+
+    <!-- Settings dialog -->
+    <string name="settings_title">Настройки</string>
+    <string name="listen_port_label">Порт</string>
+    <string name="listen_port_placeholder">напр. 20000</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+
+    <!-- About dialog -->
+    <string name="about_title">О MtPipe</string>
+    <string name="about_description">MtPipe — простая обёртка для MTProto-прокси, которая исправляет ClientHello, отправляемый вашим клиентом Telegram.</string>
+    <string name="ok">OK</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">MtPipe прокси</string>
+    <string name="notification_channel_description">Сервис MtPipe прокси</string>
+    <string name="notification_title">MtPipe</string>
+    <string name="starting_proxy">Запуск прокси…</string>
+    <string name="stop">Остановить</string>
+    <string name="error_cannot_start">Ошибка: невозможно запустить в фоне</string>
+    <string name="listening_on">Слушаю на :%s</string>
+
+    <!-- Validation -->
+    <string name="invalid_secret">Поддерживаются только FakeTls прокси. Убедитесь, что ваш secret начинается на ee</string>
+    <string name="error">Ошибка</string>
+
+    <!-- Battery optimization -->
+    <string name="battery_title">Отключить оптимизацию батареи</string>
+    <string name="battery_message">MtPipe должен работать в фоне, чтобы поддерживать активный прокси. Пожалуйста, разрешите приложению работать без ограничений по батарее.</string>
+    <string name="allow">Разрешить</string>
+    <string name="later">Позже</string>
+    <string name="battery_status_granted">Разрешение на работу в фоне: выдано</string>
+    <string name="battery_status_not_granted">Разрешение на работу в фоне: не выдано</string>
+
+    <!-- Notification permission -->
+    <string name="notif_permission_title">Разрешение на уведомления</string>
+    <string name="notif_permission_message">MtPipe нужно разрешение на уведомления, чтобы показывать статус прокси. Пожалуйста, разрешите уведомления.</string>
+    <string name="notif_status_granted">Разрешение на уведомления: выдано</string>
+    <string name="notif_status_not_granted">Разрешение на уведомления: не выдано</string>
+    <string name="grant">Выдать</string>
+</resources>
