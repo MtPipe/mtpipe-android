@@ -97,6 +97,7 @@ class MtpipeProxy(
             val orig = clientIn.recvExact(5)
             if (orig[0].toInt() and 0xFF != 0x16 || orig[1].toInt() and 0xFF != 0x03 || orig[2].toInt() and 0xFF != 0x01) {
                 Log.w(TAG, "Not a TLS ClientHello")
+                Thread.sleep(500)
                 return
             }
             val len = ((orig[3].toInt() and 0xFF) shl 8) or (orig[4].toInt() and 0xFF)
@@ -110,6 +111,7 @@ class MtpipeProxy(
             val first28Zero = (0..27).all { computed[it].toInt() == 0 }
             if (!first28Zero) {
                 Log.w(TAG, "Bad client HMAC")
+                Thread.sleep(500)
                 return
             }
             Log.d(TAG, "Client HMAC verified")
@@ -147,6 +149,7 @@ class MtpipeProxy(
             val sh5 = proxyIn.recvExact(5)
             if (sh5[0].toInt() and 0xFF != 0x16 || sh5[1].toInt() and 0xFF != 0x03 || sh5[2].toInt() and 0xFF != 0x03) {
                 Log.w(TAG, "Unknown server response: first bytes = ${sh5.take(3).joinToString(" ") { "%02X".format(it) }}")
+                Thread.sleep(500)
                 return
             }
             val shLen = ((sh5[3].toInt() and 0xFF) shl 8) or (sh5[4].toInt() and 0xFF)
@@ -166,6 +169,7 @@ class MtpipeProxy(
             val digest5 = hmacSha256(secretBytes, digest3 + shz)
             if (!digest4.contentEquals(digest5)) {
                 Log.w(TAG, "Bad server HMAC")
+                Thread.sleep(500)
                 return
             }
             Log.d(TAG, "Server HMAC verified")
@@ -181,6 +185,7 @@ class MtpipeProxy(
             pipe(proxyIn, clientOut, "proxy->client")
         } catch (e: Exception) {
             Log.e(TAG, "Client handler error: ${e.message}", e)
+            Thread.sleep(500)
         } finally {
             try { proxySocket?.close() } catch (_: Exception) {}
             try { clientSocket.close() } catch (_: Exception) {}
