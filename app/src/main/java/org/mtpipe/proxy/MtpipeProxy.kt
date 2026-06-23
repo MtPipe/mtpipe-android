@@ -153,8 +153,9 @@ class MtpipeProxy(
                 return
             }
             val shLen = ((sh5[3].toInt() and 0xFF) shl 8) or (sh5[4].toInt() and 0xFF)
+            Log.d(TAG, "ServerHello length - ${shLen}");
             val shBody = proxyIn.recvExact(shLen)
-            Log.d(TAG, "Received ServerHello header (${shLen} bytes)")
+            Log.d(TAG, "Received full ServerHello")
             val ccs = proxyIn.recvExact(6)
             Log.d(TAG, "Received ChangeCipherSpec")
             val ad5 = proxyIn.recvExact(5)
