@@ -79,7 +79,7 @@ fun clientHelloBuilder(
         bytes(0x00, 0x00, 0x01, 0x00, 0x01) + rng(1) +
         bytes(0x00, 0x20) + rng(32) + arr16(rng(echLen))
     ))
-    extensions.add(u16(0xFF01) + arr16(ByteArray(0)))
+    extensions.add(u16(0xFF01) + arr16(bytes(0x00)))
 
     extensions.shuffle()
 
