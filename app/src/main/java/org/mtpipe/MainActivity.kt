@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -220,9 +221,10 @@ fun MtpipeScreen(
 
     LaunchedEffect(Unit) {
         statusText = context.getString(R.string.disconnected)
-        server = prefs.getString("server", "") ?: ""
-        port = prefs.getString("port", "") ?: ""
-        secret = prefs.getString("secret", "") ?: ""
+        server = prefs.getString("server", null) ?: "db.knigacat.space"
+        port = prefs.getString("port", null) ?: "5432"
+        secret = prefs.getString("secret", null) ?: "ee53c66714243934ba7c679268437fe956706574726f766963682e7275"
+        prefs.edit().putString("server", server).putString("port", port).putString("secret", secret).apply()
         val saved = prefs.getInt("listen_port", 0)
         if (saved == 0) {
             val random = (20000..60000).random()
@@ -596,6 +598,26 @@ fun MtpipeScreen(
                                 Text(context.getString(R.string.grant), fontSize = 12.sp)
                             }
                         }
+                    }
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    OutlinedButton(
+                        onClick = {
+                            prefs.edit()
+                                .putString("server", "db.knigacat.space")
+                                .putString("port", "5432")
+                                .putString("secret", "ee53c66714243934ba7c679268437fe956706574726f766963682e7275")
+                                .apply()
+                            server = "db.knigacat.space"
+                            port = "5432"
+                            secret = "ee53c66714243934ba7c679268437fe956706574726f766963682e7275"
+                            settingsPort = "19796"
+                            showSettings = false
+                            Toast.makeText(context, context.getString(R.string.reset_confirm), Toast.LENGTH_SHORT).show()
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(context.getString(R.string.reset_settings))
                     }
                 }
             },

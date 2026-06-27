@@ -73,4 +73,6 @@
     <string name="notif_status_granted">Разрешение на уведомления: выдано</string>
     <string name="notif_status_not_granted">Разрешение на уведомления: не выдано</string>
     <string name="grant">Выдать</string>
+    <string name="reset_settings">Сбросить настройки</string>
+    <string name="reset_confirm">Настройки сброшены до значений по умолчанию.</string>
 </resources>

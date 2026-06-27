@@ -73,4 +73,6 @@
     <string name="notif_status_granted">Notification permission: granted</string>
     <string name="notif_status_not_granted">Notification permission: not granted</string>
     <string name="grant">Grant</string>
+    <string name="reset_settings">Reset settings</string>
+    <string name="reset_confirm">Settings have been reset to defaults.</string>
 </resources>
