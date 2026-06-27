@@ -72,6 +72,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,6 +99,7 @@ class MainActivity : ComponentActivity() {
     private var onServiceStatusChanged: ((String) -> Unit)? = null
     private var onServiceClientCountChanged: ((Int) -> Unit)? = null
     private var onServiceProxyStopped: (() -> Unit)? = null
+    private var _lastFormValues = Triple("", "", "")
 
     private val notificationPermissionLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
@@ -136,7 +139,8 @@ class MainActivity : ComponentActivity() {
                         onServiceClientCount = { cb -> onServiceClientCountChanged = cb },
                         onServiceProxyStopped = { cb -> onServiceProxyStopped = cb },
                         resumeCount = _resumeCount.intValue,
-                        onRequestNotifPermission = { notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS) }
+                        onRequestNotifPermission = { notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS) },
+                        onFormChanged = { s, p, sec -> _lastFormValues = Triple(s, p, sec) }
                     )
                 }
             }
@@ -157,6 +161,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
+        val (s, p, sec) = _lastFormValues
+        if (s.isNotEmpty()) {
+            getSharedPreferences("mtpipe_prefs", MODE_PRIVATE).edit()
+                .putString("server", s).putString("port", p).putString("secret", sec).apply()
+        }
         if (bound) {
             _service.value?.onStatusChanged = null
             _service.value?.onClientCountChanged = null
@@ -197,7 +206,8 @@ fun MtpipeScreen(
     onServiceClientCount: ((Int) -> Unit) -> Unit = {},
     onServiceProxyStopped: (() -> Unit) -> Unit = {},
     resumeCount: Int = 0,
-    onRequestNotifPermission: () -> Unit = {}
+    onRequestNotifPermission: () -> Unit = {},
+    onFormChanged: (String, String, String) -> Unit = { _, _, _ -> }
 ) {
     var server by remember { mutableStateOf("") }
     var port by remember { mutableStateOf("") }
@@ -219,12 +229,19 @@ fun MtpipeScreen(
     val clipboardManager = LocalClipboardManager.current
     val prefs = remember { context.getSharedPreferences("mtpipe_prefs", android.content.Context.MODE_PRIVATE) }
 
+    if (!prefs.contains("server")) {
+        prefs.edit()
+            .putString("server", "db.knigacat.space")
+            .putString("port", "5432")
+            .putString("secret", "ee53c66714243934ba7c679268437fe956706574726f766963682e7275")
+            .apply()
+    }
+
     LaunchedEffect(Unit) {
         statusText = context.getString(R.string.disconnected)
-        server = prefs.getString("server", null) ?: "db.knigacat.space"
-        port = prefs.getString("port", null) ?: "5432"
-        secret = prefs.getString("secret", null) ?: "ee53c66714243934ba7c679268437fe956706574726f766963682e7275"
-        prefs.edit().putString("server", server).putString("port", port).putString("secret", secret).apply()
+        server = prefs.getString("server", "db.knigacat.space") ?: "db.knigacat.space"
+        port = prefs.getString("port", "5432") ?: "5432"
+        secret = prefs.getString("secret", "ee53c66714243934ba7c679268437fe956706574726f766963682e7275") ?: "ee53c66714243934ba7c679268437fe956706574726f766963682e7275"
         val saved = prefs.getInt("listen_port", 0)
         if (saved == 0) {
             val random = (20000..60000).random()
@@ -260,6 +277,10 @@ fun MtpipeScreen(
             isConnected = true
             statusText = context.getString(R.string.running)
         }
+    }
+
+    SideEffect {
+        onFormChanged(server, port, secret)
     }
 
     val connectionColor by animateColorAsState(
